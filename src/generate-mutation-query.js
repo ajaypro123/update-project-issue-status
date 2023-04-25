@@ -10,12 +10,17 @@
 // if this is important, we will need to refactor the function
 // eslint-disable-next-line max-params
 const generateMutationQuery = (data, projectName, columnName, contentId, action) => {
+	console.log("projectName: "+projectName)
+
 	// All the projects found in organisation and repositories
 	const repoProjects = data.repository.projects.nodes || [];
 	const orgProjects = (data.repository.owner &&
 		data.repository.owner.projects &&
 		data.repository.owner.projects.nodes) ||
 		[];
+
+	console.log("repoProjects: "+repoProjects.length)
+	console.log("orgProjects: "+orgProjects.length)
 
 	// Find matching projects and columns for the card to move to
 	const endLocation = [...repoProjects, ...orgProjects]
@@ -26,6 +31,8 @@ const generateMutationQuery = (data, projectName, columnName, contentId, action)
 				.filter(column => column.name === columnName);
 			return matchingColumns.length > 0;
 		});
+
+	console.log("endLocation: "+endLocation.length)
 
 	// There are no locations for the card to move to
 	if (endLocation.length === 0) {
