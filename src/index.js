@@ -41,6 +41,7 @@ const main = async () => {
         const projectQuery = generateProjectQuery(url, eventName, project);
 
         core.debug(projectQuery);
+        console.log(projectQuery);
 
 		const {resource} = await octokit.graphql(projectQuery);
 
