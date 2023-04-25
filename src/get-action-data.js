@@ -11,7 +11,7 @@ const ACCEPTED_EVENT_TYPES = new Set([
 	'issue_comment'
 ]);
 
-const getActionData = githubContext => {
+const getActionData = async githubContext => {
     
 	const {eventName, payload} = githubContext;
 	if (!ACCEPTED_EVENT_TYPES.has(eventName)) {

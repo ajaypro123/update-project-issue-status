@@ -27,7 +27,7 @@ const main = async () => {
          **/
 
         // Get data from the current action
-        const { eventName, nodeId, url } = getActionData(github.context);
+        const { eventName, nodeId, url } = await getActionData(github.context);
 
         console.log("eventName: "+eventName);
         console.log("NodeId: "+nodeId);
@@ -38,7 +38,7 @@ const main = async () => {
         const octokit = new github.getOctokit(token);
 
         // Get the column ID from searching for the project and card Id if it exists
-        const projectQuery = generateProjectQuery(url, eventName, project);
+        const projectQuery = await generateProjectQuery(url, eventName, project);
 
         core.debug(projectQuery);
         console.log(projectQuery);

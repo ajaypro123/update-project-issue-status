@@ -9626,7 +9626,7 @@ function wrappy (fn, cb) {
  */
 // if this is important, we will need to refactor the function
 // eslint-disable-next-line max-params
-const generateMutationQuery = (data, projectName, columnName, contentId, action) => {
+const generateMutationQuery = async (data, projectName, columnName, contentId, action) => {
 	console.log("projectName: "+projectName)
 
 	// All the projects found in organisation and repositories
@@ -9741,7 +9741,7 @@ module.exports = generateMutationQuery;
  * @param {string} eventName - The current event name
  * @param {string} project - The project to find
  */
-const projectQuery = (url, eventName, project) =>
+const projectQuery = async (url, eventName, project) =>
 	`query {
 		resource( url: "${url}" ) {
 			... on ${eventName.startsWith('issue') ? 'Issue' : 'PullRequest'} {
@@ -9809,7 +9809,7 @@ const ACCEPTED_EVENT_TYPES = new Set([
 	'issue_comment'
 ]);
 
-const getActionData = githubContext => {
+const getActionData = async githubContext => {
     
 	const {eventName, payload} = githubContext;
 	if (!ACCEPTED_EVENT_TYPES.has(eventName)) {
@@ -10038,7 +10038,7 @@ const main = async () => {
          **/
 
         // Get data from the current action
-        const { eventName, nodeId, url } = getActionData(github.context);
+        const { eventName, nodeId, url } = await getActionData(github.context);
 
         console.log("eventName: "+eventName);
         console.log("NodeId: "+nodeId);
@@ -10049,7 +10049,7 @@ const main = async () => {
         const octokit = new github.getOctokit(token);
 
         // Get the column ID from searching for the project and card Id if it exists
-        const projectQuery = generateProjectQuery(url, eventName, project);
+        const projectQuery = await generateProjectQuery(url, eventName, project);
 
         core.debug(projectQuery);
         console.log(projectQuery);

@@ -5,7 +5,7 @@
  * @param {string} eventName - The current event name
  * @param {string} project - The project to find
  */
-const projectQuery = (url, eventName, project) =>
+const projectQuery = async (url, eventName, project) =>
 	`query {
 		resource( url: "${url}" ) {
 			... on ${eventName.startsWith('issue') ? 'Issue' : 'PullRequest'} {
