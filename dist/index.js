@@ -10040,6 +10040,10 @@ const main = async () => {
         // Get data from the current action
         const { eventName, nodeId, url } = getActionData(github.context);
 
+        console.log("eventName: "+eventName);
+        console.log("NodeId: "+nodeId);
+        console.log("url: "+url);
+
         // Create a method to query GitHub
         // const octokit = new github.GitHub(token);
         const octokit = new github.getOctokit(token);
@@ -10052,8 +10056,7 @@ const main = async () => {
 		const {resource} = await octokit.graphql(projectQuery);
 
 		core.debug(JSON.stringify(resource));
-
-        console.log("NodeId: "+nodeId);
+        console.log(JSON.stringify(resource));
 
         // A list of columns that line up with the user entered project and column
 		const mutationQueries = generateMutationQuery(resource, project, column, nodeId, action);
