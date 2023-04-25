@@ -15,6 +15,7 @@ const main = async () => {
         const column = core.getInput('column', { required: true });
         const issue = core.getInput('issue', { required: true });
         const token = core.getInput('token', { required: true });
+        const action = "update";
 
         /**
          * Now we need to create an instance of Octokit which will use to call
@@ -40,6 +41,26 @@ const main = async () => {
 		const {resource} = await octokit.graphql(projectQuery);
 
 		core.debug(JSON.stringify(resource));
+
+        console.log("NodeId: "+nodeId);
+
+        // A list of columns that line up with the user entered project and column
+		const mutationQueries = generateMutationQuery(resource, project, column, nodeId, action);
+		if ((action === 'delete' || action === 'archive' || action === 'add') && mutationQueries.length === 0) {
+			console.log('There is nothing to do with card');
+			return;
+		}
+
+		core.debug(mutationQueries.join('\n'));
+
+		// Run the graphql queries
+		await Promise.all(mutationQueries.map(query => octokit.graphql(query)));
+
+		if (mutationQueries.length > 1) {
+			console.log(`Card materialised into to ${column} in ${mutationQueries.length} projects called ${project}`);
+		} else {
+			console.log(`Card materialised into ${column} in ${project}`);
+		}
 
         // /**
         //  * We need to fetch the list of files that were changes in the Pull Request
